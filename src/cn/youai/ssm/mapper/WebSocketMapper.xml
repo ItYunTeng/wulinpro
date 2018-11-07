@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.youai.ssm.mapper.WebSocketMapper">
+    <!-- 根据id查询 -->
+  <select id="findGameChatContext" parameterType="cn.youai.ssm.po.GameChatContent" resultType="cn.youai.ssm.po.GameChatContent">
+      select * from game_chat_content where id = #{id}
+  </select>
+    <!-- 插入一条内容 -->
+    <insert id="saveGameChatContext" parameterType="cn.youai.ssm.po.GameChatContent">
+        insert into game_chat_content(sender,receiver,chatId,content,sendtime)values(#{sender},#{receiver},#{chatId},#{content},#{sendtime})
+    </insert>
+
+    <!-- 删除一个月前的记录 -->
+    <delete id="delGameChatContext">
+        DELETE FROM game_chat_content WHERE sendTime &lt; DATE_ADD(CURDATE(),INTERVAL -1 MONTH);
+    </delete>
+</mapper>

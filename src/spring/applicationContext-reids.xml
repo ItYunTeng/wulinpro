@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:redis="http://www.springframework.org/schema/redis"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-4.2.xsd  
+			http://www.springframework.org/schema/context 
+			http://www.springframework.org/schema/context/spring-context-4.2.xsd
+			http://www.springframework.org/schema/redis 
+			http://www.springframework.org/schema/redis/spring-redis-1.0.xsd">
+	<!-- 加载数据redis的配置 -->
+	<context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>		
+	<!-- jedis 配置 -->  
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+    	 <!-- 控制一个pool最多有多少个状态为idle(空闲)的jedis实例 -->
+         <property name="maxIdle" value="${redis.maxIdle}" /> 
+         <!-- 控制一个pool可分配多少个jedis实例 -->  
+         <property name="maxTotal" value="${redis.maxTotal}"></property> 
+         <!-- 表示当borrow一个jedis实例时，最大的等待时间，如果超过等待时间，则直接抛出JedisConnectionException -->
+         <property name="maxWaitMillis" value="${redis.maxWaitMillis}" />
+         <!-- 在borrow一个jedis实例时，是否提前进行validate操作；如果为true，则得到的jedis实例均是可用的 -->   
+         <property name="testOnBorrow" value="${redis.testOnBorrow}" />
+    </bean >  
+    <!-- redis服务器中心 -->  
+    <bean id="shardedJedisPool" class="redis.clients.jedis.ShardedJedisPool" destroy-method="destroy">  
+        <constructor-arg index="0" ref="jedisPoolConfig" />
+        <constructor-arg index="1">
+            <list>
+                <bean class="redis.clients.jedis.JedisShardInfo">
+                    <constructor-arg index="0" value="${redis.uri.0}" />
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean> 
+</beans>

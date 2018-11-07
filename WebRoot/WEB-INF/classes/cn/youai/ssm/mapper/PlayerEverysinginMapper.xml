@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.youai.ssm.dao.PlayerEverysinginMapper">
+  <resultMap id="BaseResultMap" type="cn.youai.ssm.po.PlayerEverysingin">
+    <result column="playerID" jdbcType="INTEGER" property="playerid" />
+    <result column="date" jdbcType="DATE" property="date" />
+    <result column="issingin" jdbcType="INTEGER" property="issingin" />
+    <result column="daylimit" jdbcType="INTEGER" property="daylimit" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+  </resultMap>
+  <insert id="insertEveryDaySingin" parameterType="everyDaySingin">
+    insert into player_everySingin (playerID, date, 
+      issingin,type,daylimit)
+    values ( #{playerId,jdbcType=INTEGER}, #{date,jdbcType=DATE}, 
+      1,#{mType,jdbcType=INTEGER},#{dayLimit,jdbcType=INTEGER})
+  </insert>
+  
+  <select id="selectEverysingin" resultType="java.lang.Integer">
+    select count(1)
+    from player_everySingin
+    WHERE playerID=#{0} and date = #{1}
+    and type=0 and daylimit=0
+  </select>
+  
+  <select id="selectAllsinginTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select count(1)
+    from player_everySingin
+    WHERE DATE_FORMAT( date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+    and type=1 and daylimit=#{daylimit,jdbcType=INTEGER} and playerID=#{playerId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectSinginTotal" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select count(1)
+    from player_everySingin
+    WHERE DATE_FORMAT( date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+    and type=0 and daylimit=0 and  playerID=#{playerId,jdbcType=INTEGER}
+  </select>
+</mapper>

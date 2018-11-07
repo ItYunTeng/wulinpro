@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="wulinpro"
+  id="myeclipse.1540816960729"
+  context-root="/wulinpro"
+  j2ee-spec="6.0"
+  archive="wulinpro.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

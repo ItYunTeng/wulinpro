@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.youai.ssm.dao.MonReawardMapper">
+  <resultMap id="BaseResultMap" type="cn.youai.ssm.po.MonRewardExc">
+    <result column="date" jdbcType="DATE" property="date" />
+    <result column="everyDayrewardMap" jdbcType="VARCHAR" property="everydayrewardmap" />
+    <result column="type" jdbcType="INTEGER" property="type"/>
+    <result column="daylimit" jdbcType="INTEGER" property="daylimit"/>
+    <association property="isSinginState" column="date" javaType="cn.youai.ssm.po.PlayerEverysingin">
+    	<result column="issingin" jdbcType="INTEGER" property="issingin" />
+    </association>
+  </resultMap>
+  <select id="selectAll" resultMap="BaseResultMap">
+   	SELECT a.*,b.date FROM mon_reaward a
+	LEFT JOIN player_everySingin b ON a.date = b.date
+	WHERE DATE_FORMAT( a.date, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ) and a.type=0
+  </select>
+  
+  <select id="selectAlltotal" resultMap="BaseResultMap">
+   	SELECT a.* FROM mon_reaward a
+	WHERE a.daylimit >= 1 and a.type=1
+  </select>
+</mapper>

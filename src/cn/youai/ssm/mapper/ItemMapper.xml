@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.youai.ssm.dao.ItemMapper">
+  <resultMap id="BaseResultMap" type="cn.youai.ssm.po.Item">
+    <id column="sequenceid" jdbcType="INTEGER" property="sequenceid" />
+    <result column="refId" jdbcType="INTEGER" property="refid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="imageId" jdbcType="VARCHAR" property="imageid" />
+    <result column="iconId" jdbcType="VARCHAR" property="iconid" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="sequence" jdbcType="INTEGER" property="sequence" />
+    <result column="moneyType" jdbcType="INTEGER" property="moneytype" />
+    <result column="priceCalculateType" jdbcType="INTEGER" property="pricecalculatetype" />
+    <result column="originalPrice" jdbcType="INTEGER" property="originalprice" />
+    <result column="discount" jdbcType="INTEGER" property="discount" />
+    <result column="buyTimesLimit" jdbcType="INTEGER" property="buytimeslimit" />
+    <result column="itemEffect" jdbcType="VARCHAR" property="itemeffect" />
+    <result column="vipLevelLimit" jdbcType="INTEGER" property="viplevellimit" />
+    <result column="propShowType" jdbcType="INTEGER" property="propshowtype" />
+    <result column="visible" jdbcType="BIT" property="visible" />
+    <result column="petFra" jdbcType="INTEGER" property="petfra" />
+  </resultMap>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select sequenceid, refId, name, imageId, iconId, description, sequence, moneyType, 
+    priceCalculateType, originalPrice, discount, buyTimesLimit, itemEffect, vipLevelLimit, 
+    propShowType, visible, petFra
+    from item
+    where refId = #{refid,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select sequenceid, refId, name, imageId, iconId, description, sequence, moneyType, 
+    priceCalculateType, originalPrice, discount, buyTimesLimit, itemEffect, vipLevelLimit, 
+    propShowType, visible, petFra
+    from item
+  </select>
+</mapper>

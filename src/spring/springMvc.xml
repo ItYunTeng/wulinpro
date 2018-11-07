@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.2.xsd 
+	http://www.springframework.org/schema/mvc 
+	http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd 
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-4.2.xsd ">
+	<!-- 扫描controller -->
+	<context:component-scan base-package="cn.youai.ssm.controller"/>
+	<mvc:annotation-driven>	 
+    	<mvc:message-converters register-defaults="true">
+    		 <!-- json字符数据转换 -->
+    		 <bean class="org.springframework.http.converter.ResourceHttpMessageConverter" />
+    		 <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" >
+    		 	<property name="supportedMediaTypes">
+		            <list>
+		              <!-- 这里顺序不能反，一定先写text/html,不然ie下出现下载提示 -->
+                      <value>text/html;charset=UTF-8</value>
+		              <value>application/json;charset=UTF-8</value>
+		            </list> 
+         		</property>
+    		 </bean>
+    	</mvc:message-converters>
+    </mvc:annotation-driven>
+    <!-- 注册Spring自带编辑器 自己可以定义 -->
+ 	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+ 		<property name="propertyEditorRegistrars">
+ 			<list>
+ 				<bean class="cn.youai.ssm.converter.CustomPropertyEditor"></bean>
+ 			</list>
+ 		</property>
+ 	</bean> 
+    <!-- 自定义参数类型的绑定 如日期格式转换 -->
+ 	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+		<property name="converters">
+			<list>
+				<!-- 日期类型绑定 -->
+				<bean class="cn.youai.ssm.converter.CustomDateConverter"/>
+				<!-- 文件格式 -->
+				<bean class="cn.youai.ssm.converter.SpringMVCFileConverter"/>
+				<!-- 字符串空格 -->
+				<bean class="cn.youai.ssm.converter.StringTrimConverter"/>  
+			</list>
+		</property>
+	</bean>
+    <!-- 文件上传 -->      
+    <bean id="multipartResolver"  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    	<property name="defaultEncoding" value="UTF-8" />
+        <property name="maxUploadSize" value="102400000"></property>
+    </bean>
+    
+    <!-- 视图解析器 -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/"></property>
+        <property name="suffix" value=".jsp"></property>
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
+    </bean>
+	<!-- 自定义全局异常 -->
+	<bean id="exceptionResolver" class="cn.youai.ssm.exception.GlobalExceptionAdvice"/>
+	
+	<!-- <mvc:interceptors>
+        <mvc:interceptor>
+            拦截所有请求
+            <mvc:mapping path="/**" />
+            该类是我们自定义的Interceptor
+            <bean class="cn.youai.ssm.interceptor.OringinInterfce" />
+        </mvc:interceptor>
+    </mvc:interceptors> -->
+</beans>
