@@ -32,6 +32,7 @@ public class RedisClientTemplate {
         shardedJedis.disconnect();
     }
 
+    
     /**
      * 设置单个值
      * 
@@ -3098,5 +3099,94 @@ public class RedisClientTemplate {
         }
         return result;
     }
-
+    
+    /**
+     * 保存list
+     */
+    public <T> void setList(String key ,List<T> list){  
+    	ShardedJedis shardedJedis = redisDataSource.getRedisClient();
+    	if (shardedJedis == null) {
+            return;
+        }
+        boolean broken = false;
+        try {  
+        	shardedJedis.set(key.getBytes(),SerializeUtil.serialize(list));  
+        } catch (Exception e) {  
+        	log.error(e.getMessage(), e);  
+        	broken = true;
+        }finally {
+            redisDataSource.returnResource(shardedJedis, broken);
+        }
+    }
+    /**
+    * 获取list 
+    * @param <T> 
+    * @param key 
+    * @return list 
+    */  
+   @SuppressWarnings("unchecked")
+   public <T> List<T> getList(String key){  
+	   ShardedJedis shardedJedis = redisDataSource.getRedisClient();
+	   List<T> result = null;
+       if(shardedJedis == null || !shardedJedis.exists(key.getBytes())){  
+           return result;  
+       }  
+       boolean broken = false;
+       try { 
+    	   byte[] in = shardedJedis.get(key.getBytes());    
+    	   result = (List<T>) SerializeUtil.unserialize(in);    
+       }catch (Exception e) {
+    	   log.error(e.getMessage(), e);  
+       	   broken = true;
+       }finally {
+           redisDataSource.returnResource(shardedJedis, broken);
+       }
+       return result;  
+   }  
+   /** 
+    * 设置 map 
+    * @param <T> 
+    * @param key 
+    * @param value 
+    */  
+   public <T> void setMap(String key ,Map<String,T> map){  
+	   ShardedJedis shardedJedis = redisDataSource.getRedisClient();
+	   if (shardedJedis == null) {
+           return;
+       }
+	   boolean broken = false;
+       try {  
+    	   shardedJedis.set(key.getBytes(),SerializeUtil.serialize(map));  
+       } catch (Exception e) {
+    	   log.error(e.getMessage(), e);  
+      	   broken = true;
+	   }finally {
+          redisDataSource.returnResource(shardedJedis, broken);
+       }
+   }  
+   /** 
+    * 获取list 
+    * @param <T> 
+    * @param key 
+    * @return list 
+    */  
+   @SuppressWarnings("unchecked")
+   public <T> Map<String,T> getMap(String key){  
+	   ShardedJedis shardedJedis = redisDataSource.getRedisClient();
+	   Map<String,T> result = null;
+	   if(shardedJedis == null || !shardedJedis.exists(key.getBytes())){  
+           return result;  
+       }  
+       boolean broken = false;
+       try {
+    	   byte[] in = shardedJedis.get(key.getBytes());    
+    	   result = (Map<String, T>) SerializeUtil.unserialize(in);    
+       } catch (Exception e) {
+    	   log.error(e.getMessage(), e);  
+       	   broken = true;
+       }finally {
+           redisDataSource.returnResource(shardedJedis, broken);
+       }
+       return result;  
+   }  
 }

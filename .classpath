@@ -85,5 +85,10 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-jobs-2.2.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/quartz-2.2.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/javax.servlet-api-3.1.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/canal.client-1.0.25.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/canal.common-1.0.25.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/canal.protocol-1.0.25.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/protobuf-java-2.5.0.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/commons-lang-2.6.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
